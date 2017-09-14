@@ -35,20 +35,22 @@ class MySQLParams:
 
     def get_dump_args(tables=[]):
         "Get args for mysqldump"
-        pass
+        return '-h {} -P {} -u {} {}'.format(
+            this.host, this.port, this.user, ' '.join(this.name, tables))
 
     def get_mysql_args():
         "Get args for mysql"
-        pass
+        return '-h {} -P {} -u {} {}'.format(
+            this.host, this.port, this.user, this.name, tables)
 
     def load_db(self):
         "Load DB using MySQLdb"
-        import MySQLdb
-        return MySQLdb.connect(host=self.host,
-                               user=self.user,
-                               passwd=self.password,
-                               db=self.name,
-                               port=self.port)
+        from MySQLdb import connect
+        return connect(host=self.host,
+                       user=self.user,
+                       passwd=self.password,
+                       db=self.name,
+                       port=self.port)
 
 def load_params(path,
                 db_params={'host': 'database_host',

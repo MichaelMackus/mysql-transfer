@@ -18,22 +18,15 @@ def transfer_db(from_params, to_params, tables=[]):
 
     try:
         p = subprocess.Popen(
-            'mysqldump -h {from_host} -P {from_port} -u {from_user} {from_args} | '
-            'mysql -h {to_host} -P {to_port} -u {to_user} {to_args}'.format(
-                from_host=from_params.host,
-                from_port=from_params.port,
-                from_user=from_params.user,
+            'mysqldump {from_args} | mysql {to_args}'.format(
                 from_args=from_params.get_dump_args(tables),
-                to_host=to_params.host,
-                to_port=to_params.port,
-                to_user=to_params.user,
                 to_args=to_params.get_mysql_args()),
             shell=True)
-        r = p.communicate()
     except AttributeError:
         raise MySQLTransferException('Invalid MySQLParams object passed '
                                      'to transfer_db.')
 
+    r = p.communicate()
     if r[1]:
         raise MySQLTransferException(
             "MySQL transfer error: {}".format(r[1]))
