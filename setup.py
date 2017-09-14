@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='mysql-transfer',
-      version='0.1',
+      version='0.2',
       description='Transfer MySQL databases. Also has support for '
                   'loading parameters from YAML files and checking '
                   'for a migration version match (before transfer).',
