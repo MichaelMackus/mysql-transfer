@@ -4,7 +4,7 @@ This python module is for transferring MySQL databases.
 
 ## Quick Start
 
-Install mysql_transfer with `pip install git+ssh://git@github.com/MichaelMackus/mysql-transfer.git`.
+Install mysql_transfer with `pip install git+https://git@github.com/MichaelMackus/mysql-transfer.git`.
 
 Transferring a symfony site:
 
