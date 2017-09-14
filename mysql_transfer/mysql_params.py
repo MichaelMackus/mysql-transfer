@@ -100,13 +100,10 @@ def load_params(path,
                     '{} is not a valid params file: param_key {} not found'
                         .format(path, param_key))
 
-        params = []
-
-        # validate loaded_params exist
+        params = {}
         for key, param in db_params.iteritems():
-            if param not in loaded_params:
-                raise MySQLParseException(
-                    '{} is not a valid params file: key {} not found'
-                        .format(path, param))
+            if param in loaded_params and loaded_params[param] is not None:
+                cast = str if key != 'port' else int
+                params[key] = cast(loaded_params[param])
 
-        MySQLParams(params)
+        return MySQLParams(params)
