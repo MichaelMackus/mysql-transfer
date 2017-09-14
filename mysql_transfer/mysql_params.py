@@ -31,15 +31,15 @@ class MySQLParams:
         self.password = params['password'] if 'password' in params else None
         self.port = params['port'] if 'port' in params else 3306
 
-    def get_dump_args(tables=[]):
+    def get_dump_args(self, tables=[]):
         "Get args for mysqldump"
-        return '-h {} -P {} -u {} {}'.format(
-            this.host, this.port, this.user, ' '.join(this.name, tables))
+        return '-h {} -P {} -u {} -p{} {}'.format(
+            self.host, self.port, self.user, self.password, ' '.join([self.name] + tables))
 
-    def get_mysql_args():
+    def get_mysql_args(self):
         "Get args for mysql"
-        return '-h {} -P {} -u {} {}'.format(
-            this.host, this.port, this.user, this.name, tables)
+        return '-h {} -P {} -u {} -p{} {}'.format(
+            self.host, self.port, self.user, self.password, self.name)
 
     def load_db(self):
         "Load DB using MySQLdb"
