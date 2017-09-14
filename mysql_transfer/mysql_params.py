@@ -1,5 +1,3 @@
-import yaml
-
 class MySQLParseException(Exception):
     pass
 
@@ -88,6 +86,8 @@ def load_params(path,
         database_password: password
         database_port: port
     """
+
+    import yaml
 
     with open(path) as f:
         if param_key is None:
