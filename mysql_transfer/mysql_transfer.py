@@ -27,8 +27,6 @@ def transfer_db(from_params, to_params, tables=[]):
                                      'to transfer_db.')
 
     r = p.communicate()
-    if r[1]:
-        raise MySQLTransferException(
-            "MySQL transfer error: {}".format(r[1]))
 
-    print(r[0])
+    if r[1]:
+        raise MySQLTransferException('MySQL transfer error')
