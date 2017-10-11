@@ -3,7 +3,7 @@ import subprocess
 class MySQLTransferException(Exception):
     pass
 
-def transfer_db(from_params, to_params, tables=[]):
+def transfer_db(from_params, to_params=None, tables=[]):
     """
     Transfer database along with a list of tables.
 
@@ -17,11 +17,16 @@ def transfer_db(from_params, to_params, tables=[]):
     """
 
     try:
-        p = subprocess.Popen(
-            'mysqldump {from_args} | mysql {to_args}'.format(
-                from_args=from_params.get_dump_args(tables),
-                to_args=to_params.get_mysql_args()),
-            shell=True)
+        if to_params is not None:
+            p = subprocess.Popen(
+                'mysqldump {from_args} | mysql {to_args}'.format(
+                    from_args=from_params.get_dump_args(tables),
+                    to_args=to_params.get_mysql_args()),
+                shell=True)
+        else:
+            p = subprocess.Popen(
+                'mysqldump ' + from_params.get_dump_args(tables),
+                shell=True)
     except AttributeError:
         raise MySQLTransferException('Invalid MySQLParams object passed '
                                      'to transfer_db.')
