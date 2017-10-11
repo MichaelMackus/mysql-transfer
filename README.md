@@ -60,5 +60,36 @@ tables = [] # set list of tables to transfer - empty means *ALL*
 mysql_transfer.transfer_db(from, to, tables)
 ```
 
+To transfer via an SSH tunnel:
+
+```
+from contextlib import closing
+from mysql_transfer import transfer_db
+from mysql_transfer.mysql_params import Params, MySQLParams
+from mysql_transfer.mysql_tunnel import open_tunnel, SSHParams
+
+from = MySQLParams({'host': '127.0.0.1',
+                    'name': 'db_name',
+                    'user': 'user_name',
+                    'password': 'password',
+                    'port': '3307'})
+
+to = MySQLParams({'host': '127.0.0.1',
+                  'name': 'to_db_name',
+                  'user': 'local_user_name',
+                  'password': 'local_password'})
+
+tables = [] # set list of tables to transfer - empty means *ALL*
+
+# create our SSH tunnel, listening to remote-db.host.com:3306 on
+# 127.0.0.1:3307, via SSH tunnel to ssh_host
+with open_tunnel(SSHParams('ssh_host'),
+                 Params('remote-db.host.com',
+                        3306),
+                 from):
+    # do the transfer
+    transfer_db(from, to, tables)
+```
+
 For more details, see `help(mysql_transfer.load_params)`, `help(mysql_transfer.MySQLParams)`, and
 `help(mysql_transfer.transfer_db)` in a python REPL (you'll have to `import mysql_transfer` first).

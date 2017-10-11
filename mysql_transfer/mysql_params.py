@@ -1,7 +1,34 @@
 class MySQLParseException(Exception):
     pass
 
-class MySQLParams:
+class Params(object):
+    """
+    Generic container for parameters.
+    """
+
+    def __init__(self,
+                 host,
+                 port,
+                 name=None,
+                 user=None,
+                 password=None):
+        """
+        Initialize Params. Direct instantiation useful for SSH tunneling.
+
+        ARGUMENTS:
+
+        params - dictionary with optional keys: name, user, host, password,
+            and port.
+        """
+
+        self.name = name
+        self.user = user
+        self.host = host
+        self.password = password
+        self.port = port
+
+
+class MySQLParams(Params):
     """
     Container for MySQL parameters. Has some helpful methods to get
     args for the `mysql` and `mysqldump` commands, as well as a method
@@ -13,7 +40,7 @@ class MySQLParams:
         Initialize MySQLParams. You probably want to load the params
         using load_params if your params are in a YAML file.
 
-        
+
         ARGUMENTS:
 
         params - dictionary with keys: name, user, host, password, and
@@ -25,11 +52,12 @@ class MySQLParams:
         if 'user' not in params:
             raise MySQLParseException('"user" is a required parameter')
 
-        self.name = params['name']
-        self.user = params['user']
-        self.host = params['host'] if 'host' in params else 'localhost'
-        self.password = params['password'] if 'password' in params else None
-        self.port = params['port'] if 'port' in params else 3306
+        super(self.__class__, self).__init__(
+             host=params['host'] if 'host' in params else 'localhost',
+             port=params['port'] if 'port' in params else 3306,
+             name=params['name'] if 'name' in params else None,
+             user=params['user'] if 'user' in params else None,
+             password=params['password'] if 'password' in params else None)
 
     def get_dump_args(self, tables=[]):
         "Get args for mysqldump"
