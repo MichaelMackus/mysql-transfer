@@ -62,7 +62,7 @@ mysql_transfer.transfer_db(from_params, to_params, tables)
 
 To transfer via an SSH tunnel:
 
-```
+```python
 from contextlib import closing
 from mysql_transfer import transfer_db
 from mysql_transfer.mysql_params import Params, MySQLParams
