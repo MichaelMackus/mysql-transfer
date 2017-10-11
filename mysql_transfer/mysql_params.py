@@ -61,13 +61,27 @@ class MySQLParams(Params):
 
     def get_dump_args(self, tables=[]):
         "Get args for mysqldump"
-        return '-h {} -P {} -u {} -p{} {}'.format(
-            self.host, self.port, self.user, self.password, ' '.join([self.name] + tables))
+        extra_args = ''
+        if self.user is not None:
+            extra_args += '-u {} '.format(self.user)
+        if self.password is not None:
+            extra_args += '-p{} '.format(self.password)
+        if self.name is not None or len(tables) > 0:
+            extra_args += '{}'.format(' '.join([self.name] + tables))
+
+        return '-h {} -P {} {}'.format(self.host, self.port, extra_args)
 
     def get_mysql_args(self):
         "Get args for mysql"
-        return '-h {} -P {} -u {} -p{} {}'.format(
-            self.host, self.port, self.user, self.password, self.name)
+        extra_args = ''
+        if self.user is not None:
+            extra_args += '-u {} '.format(self.user)
+        if self.password is not None:
+            extra_args += '-p{} '.format(self.password)
+        if self.name is not None:
+            extra_args += '{}'.format(self.name)
+
+        return '-h {} -P {} {}'.format(self.host, self.port, extra_args)
 
     def load_db(self):
         "Load DB using MySQLdb"
