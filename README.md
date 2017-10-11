@@ -12,7 +12,7 @@ Transferring a symfony site:
 from contextlib import closing
 import mysql_transfer
 
-from = mysql_transfer.load_params('path/to/parameters.yml',
+from_params = mysql_transfer.load_params('path/to/parameters.yml',
                            db_params={'host': 'database_host',
                                       'name': 'database_name',
                                       'user': 'database_user',
@@ -20,7 +20,7 @@ from = mysql_transfer.load_params('path/to/parameters.yml',
                                       'port': 'database_port'},
                            param_key='parameters')
 
-to = mysql_transfer.load_params('path/to/parameters.yml',
+to_params = mysql_transfer.load_params('path/to/parameters.yml',
                            db_params={'host': 'database_host',
                                       'name': 'database_name',
                                       'user': 'database_user',
@@ -30,7 +30,7 @@ to = mysql_transfer.load_params('path/to/parameters.yml',
 
 
 tables = [] # set list of tables to transfer - empty means *ALL*
-mysql_transfer.transfer_db(from, to, tables)
+mysql_transfer.transfer_db(from_params, to_params, tables)
 ```
 
 To transfer a bolt site, use:
@@ -39,7 +39,7 @@ To transfer a bolt site, use:
 from contextlib import closing
 import mysql_transfer
 
-from = mysql_transfer.load_params('path/to/parameters.yml',
+from_params = mysql_transfer.load_params('path/to/parameters.yml',
                            db_params={'host': 'host',
                                       'name': 'databasename',
                                       'user': 'username',
@@ -47,7 +47,7 @@ from = mysql_transfer.load_params('path/to/parameters.yml',
                                       'port': 'port'},
                            param_key='database')
 
-to = mysql_transfer.load_params('path/to/parameters.yml',
+to_params = mysql_transfer.load_params('path/to/parameters.yml',
                            db_params={'host': 'host',
                                       'name': 'databasename',
                                       'user': 'username',
@@ -57,7 +57,7 @@ to = mysql_transfer.load_params('path/to/parameters.yml',
 
 
 tables = [] # set list of tables to transfer - empty means *ALL*
-mysql_transfer.transfer_db(from, to, tables)
+mysql_transfer.transfer_db(from_params, to_params, tables)
 ```
 
 To transfer via an SSH tunnel:
@@ -68,13 +68,13 @@ from mysql_transfer import transfer_db
 from mysql_transfer.mysql_params import Params, MySQLParams
 from mysql_transfer.mysql_tunnel import open_tunnel, SSHParams
 
-from = MySQLParams({'host': '127.0.0.1',
+from_params = MySQLParams({'host': '127.0.0.1',
                     'name': 'db_name',
                     'user': 'user_name',
                     'password': 'password',
                     'port': '3307'})
 
-to = MySQLParams({'host': '127.0.0.1',
+to_params = MySQLParams({'host': '127.0.0.1',
                   'name': 'to_db_name',
                   'user': 'local_user_name',
                   'password': 'local_password'})
@@ -86,9 +86,9 @@ tables = [] # set list of tables to transfer - empty means *ALL*
 with open_tunnel(SSHParams('ssh_host'),
                  Params('remote-db.host.com',
                         3306),
-                 from):
+                 from_params):
     # do the transfer
-    transfer_db(from, to, tables)
+    transfer_db(from_params, to_params, tables)
 ```
 
 For more details, see `help(mysql_transfer.load_params)`, `help(mysql_transfer.MySQLParams)`, and
